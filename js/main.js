@@ -27,12 +27,13 @@ var createAd = function (count) {
   var locationX;
   var locationY;
 
-  for (var i = 1; i <= count; i++) {
+  for (var i = 0; i <= count; i++) {
+    var avatarNumber = i % 8 + 1;
     locationX = getRandomValue(600, 1200);
     locationY = getRandomValue(130, 630);
     var ad = {
       'author': {
-        'avatar': 'img/avatars/user' + '0' + i + '.png' // где {{xx}} это число от 1 до 8 с ведущим нулём. Например, 01, 02 и т. д. Адреса изображений не повторяются
+        'avatar': 'img/avatars/user' + '0' + avatarNumber + '.png' // где {{xx}} это число от 1 до 8 с ведущим нулём. Например, 01, 02 и т. д. Адреса изображений не повторяются
       },
       'offer': {
         'title': getArrayRandomValue(title), // строка, заголовок предложения
@@ -61,8 +62,8 @@ createAd(9);
 
 var renderPin = function (ad) {
   var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-  var pinImg = pinTemplate.querySelector('img');
   var pin = pinTemplate.cloneNode(true);
+  var pinImg = pin.querySelector('img');
 
   pin.style.left = ad.location.x - 25 + 'px';
   pin.style.top = ad.location.y - 70 + 'px';
