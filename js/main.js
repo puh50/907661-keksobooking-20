@@ -81,8 +81,7 @@ for (var i = 0; i < ads.length; i++) {
 }
 mapPins.appendChild(fragmentPin);
 
-var pins = document.querySelectorAll('.map__pin'); // should the var be inside renderCard?
-var renderCard = function (pinArray, adArray) {
+var renderCard = function (adArray) {
   var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
   var card = cardTemplate.cloneNode(true);
 
@@ -164,4 +163,4 @@ var renderCard = function (pinArray, adArray) {
 };
 
 var mapFilters = document.querySelector('.map__filters-container');
-map.insertBefore(renderCard(pins, ads), mapFilters);
+map.insertBefore(renderCard(ads), mapFilters);
