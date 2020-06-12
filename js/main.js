@@ -85,7 +85,6 @@ var fillDefaultAddress = function () {
   var height = mainPinStyles.getPropertyValue('height');
   var xCenter = parseInt(positionLeft, 10) + Math.floor(parseInt(width, 10) / 2);
   var yCenter = parseInt(positionTop, 10) + Math.floor(parseInt(height, 10) / 2);
-
   addressField.value = xCenter + ', ' + yCenter;
 
   return {x: xCenter, y: yCenter, width: width};
@@ -113,7 +112,6 @@ var activatePage = function () {
     var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
     var pin = pinTemplate.cloneNode(true);
     var pinImg = pin.querySelector('img');
-
     pin.style.left = ad.location.x - 25 + 'px';
     pin.style.top = ad.location.y - 70 + 'px';
     pinImg.src = ad.author.avatar;
@@ -132,44 +130,35 @@ var activatePage = function () {
   var fillAddressActiveMap = function () {
     var pointerHeight = 18; // from pseudo element ::after of mapPinMain, border-top property
     var pointerY = fillDefaultAddress().y + Math.floor(parseInt(fillDefaultAddress().width, 10) / 2) + pointerHeight;
-
     addressField.value = fillDefaultAddress().x + ', ' + pointerY;
   };
   fillAddressActiveMap();
 
+  var guestsSelect = adForm.querySelector('#capacity');
+  var roomsSelect = adForm.querySelector('#room_number');
+  var validateRoomsGuestsNumber = function (rooms, guests) {
+    rooms = roomsSelect;
+    guests = guestsSelect;
+    var roomsValue = parseInt(rooms.value, 10);
+    var guestsValue = parseInt(guests.value, 10);
+    if (roomsValue === 1 && (guestsValue === 0 || guestsValue > roomsValue)) {
+      roomsSelect.setCustomValidity('для 1 гостя');
+    } else if (roomsValue === 2 && (guestsValue === 0 || guestsValue > roomsValue)) {
+      roomsSelect.setCustomValidity('для 1 или 2 гостей');
+    } else if (roomsValue === 3 && (guestsValue === 0 || guestsValue > roomsValue)) {
+      roomsSelect.setCustomValidity('для 1, 2 или 3 гостей');
+    } else if (roomsValue === 100 && guestsValue !== 0) {
+      roomsSelect.setCustomValidity('не для гостей');
+    } else {
+      roomsSelect.setCustomValidity('');
+    }
+  };
+  roomsSelect.addEventListener('change', validateRoomsGuestsNumber);
+  guestsSelect.addEventListener('change', validateRoomsGuestsNumber);
+
   mapPinMain.removeEventListener('mousedown', onPinMainMousedown);
   mapPinMain.removeEventListener('keydown', onPinMainMousedown);
 };
-
-var guestsSelect = adForm.querySelector('#capacity');
-var roomsSelect = adForm.querySelector('#room_number');
-roomsSelect.addEventListener('input', function () {
-  if (roomsSelect.value === '1' && guestsSelect.value > roomsSelect.value) {
-    roomsSelect.setCustomValidity('для 1 гостя');
-  } else if (roomsSelect.value === '2' && guestsSelect.value > roomsSelect.value) {
-    roomsSelect.setCustomValidity('для 1 или 2 гостей');
-  } else if (roomsSelect.value === '3' && guestsSelect.value > roomsSelect.value) {
-    roomsSelect.setCustomValidity('для 1, 2 или 3 гостей');
-  } else if (roomsSelect.value === '100' && guestsSelect.value !== '0') {
-    roomsSelect.setCustomValidity('не для гостей');
-  } else {
-    roomsSelect.setCustomValidity('');
-  }
-});
-
-guestsSelect.addEventListener('input', function () {
-  if (guestsSelect.value === '1' && roomsSelect.value >= '100') {
-    guestsSelect.setCustomValidity('для 1 гостя выберите 3 или менее комнат');
-  } else if (guestsSelect.value === '2' && roomsSelect.value < guestsSelect.value || roomsSelect.value >= '100') {
-    guestsSelect.setCustomValidity('для 2 гостей выберите 2 или 3 комнаты');
-  } else if (guestsSelect.value === '3' && roomsSelect.value < guestsSelect.value || roomsSelect.value >= '100') {
-    guestsSelect.setCustomValidity('для 3 гостей выберите 3 комнаты');
-  } else if (guestsSelect.value === '0' && roomsSelect.value < '100') {
-    guestsSelect.setCustomValidity('выберите 100 комнат');
-  } else {
-    guestsSelect.setCustomValidity('');
-  }
-});
 
 // var renderCard = function (adArray) {
 //   var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
