@@ -87,7 +87,11 @@ var fillDefaultAddress = function () {
   var yCenter = parseInt(positionTop, 10) + Math.floor(parseInt(height, 10) / 2);
   addressField.value = xCenter + ', ' + yCenter;
 
-  return {x: xCenter, y: yCenter, width: width};
+  return {
+    x: xCenter,
+    y: yCenter,
+    width: width
+  };
 };
 fillDefaultAddress();
 
@@ -189,22 +193,12 @@ var activatePage = function () {
       title.setCustomValidity('');
     }
   };
+  title.addEventListener('invalid', titleValidationHandler);
   title.addEventListener('input', titleValidationHandler);
-
-  // price validation
-
-  var price = adForm.querySelector('#price');
-  var priceValidationHandler = function () {
-    if (price.value.length === 0) {
-      price.setCustomValidity('Заполните поле. Цена за ночь должна быть меньше 1 000 000');
-    } else if (price.value > 1000000) {
-      price.setCustomValidity('Цена за ночь должна быть меньше 1 000 000');
-    }
-  };
-  price.addEventListener('change', priceValidationHandler);
 
   // price/type validation
 
+  var price = adForm.querySelector('#price');
   var type = adForm.querySelector('#type');
   var priceTypeValidationHandler = function () {
 
@@ -212,30 +206,54 @@ var activatePage = function () {
       return price.value < minPrice ? price.setCustomValidity('Минимальная цена за ночь для ' + type.options[type.selectedIndex].text + ': ' + minPrice) : price.setCustomValidity('');
     };
 
+    var changePlaceholder = function (placeholder) {
+      price.setAttribute('placeholder', placeholder);
+    };
+
     switch (type.value) {
-      case 'flat': getMinPriceNotification(1000);
+      case 'bungalo':
+        changePlaceholder(0);
         break;
-      case 'house': getMinPriceNotification(5000);
+      case 'flat':
+        getMinPriceNotification(1000);
+        changePlaceholder(1000);
         break;
-      case 'palace': getMinPriceNotification(10000);
+      case 'house':
+        getMinPriceNotification(5000);
+        changePlaceholder(5000);
+        break;
+      case 'palace':
+        getMinPriceNotification(10000);
+        changePlaceholder(10000);
     }
   };
   price.addEventListener('change', priceTypeValidationHandler);
   type.addEventListener('change', priceTypeValidationHandler);
 
+  // price validation
+
+  var priceValidationHandler = function () {
+    if (price.value.length === 0) {
+      price.setCustomValidity('Заполните поле. Цена за ночь должна быть меньше 1 000 000');
+    } else if (price.value > 1000000) {
+      price.setCustomValidity('Цена за ночь должна быть меньше 1 000 000');
+    }
+  };
+  price.addEventListener('invalid', priceValidationHandler);
+  price.addEventListener('input', priceValidationHandler);
+
   // timein/timout validation
 
   var timein = adForm.querySelector('#timein');
   var timeout = adForm.querySelector('#timeout');
-  var timeinOutValidationHandler = function () {
-    if (timein.value !== timeout.value) {
-      timeout.setCustomValidity('Для времени заезда ' + timein.options[timein.selectedIndex].text + ', время выезда должно быть Выезд до ' + timein.value.substr(-0, 2));
-    } else {
-      timeout.setCustomValidity('');
-    }
+  var timeoutValidationHandler = function () {
+    timeout.value = timein.value;
   };
-  timein.addEventListener('change', timeinOutValidationHandler);
-  timeout.addEventListener('change', timeinOutValidationHandler);
+  var timeinValidationHandler = function () {
+    timein.value = timeout.value;
+  };
+  timein.addEventListener('change', timeoutValidationHandler);
+  timeout.addEventListener('change', timeinValidationHandler);
 
   mapPinMain.removeEventListener('mousedown', onPinMainMousedown);
   mapPinMain.removeEventListener('keydown', onPinMainMousedown);
