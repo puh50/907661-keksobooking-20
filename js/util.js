@@ -1,12 +1,22 @@
 'use strict';
 
 (function () {
-  window.closePopupByEscape = function (evt) {
-    var map = document.querySelector('.map');
-    var popup = map.querySelector('.popup');
-    if (popup && evt.code === 'Escape') {
-      popup.remove();
-      document.removeEventListener('keydown', window.closePopupByEscape);
+  window.util = {
+    closeByEscape: function (evt, element) {
+      if (element && evt.code === 'Escape') {
+        element.remove();
+        document.removeEventListener('keydown', window.util.closeByEscape);
+      }
+    },
+    disableFields: function (fields) {
+      for (var f = 0; f < fields.length; f++) {
+        fields[f].setAttribute('disabled', '');
+      }
+    },
+    activateFields: function (fields) {
+      for (var f = 0; f < fields.length; f++) {
+        fields[f].removeAttribute('disabled');
+      }
     }
   };
 })();

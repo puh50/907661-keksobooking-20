@@ -9,6 +9,7 @@
       var mapFilter = map.querySelector('.map__filters-container');
       var mapPins = document.querySelector('.map__pins');
       var fragmentPin = document.createDocumentFragment();
+
       for (var i = 0; i < window.data.ads.length; i++) {
         var pin = window.createPin(window.data.ads[i]);
         fragmentPin.appendChild(pin);
@@ -16,7 +17,6 @@
         (function (index) {
           pin.addEventListener('click', function () {
             closePopup();
-            document.addEventListener('keydown', window.closePopupByEscape);
             map.insertBefore(window.craeteCard(window.data.ads[index]), mapFilter);
           });
         })(i);
@@ -29,6 +29,11 @@
             }
           });
         })(i);
+
+        document.addEventListener('keydown', function (evt) {
+          var popup = map.querySelector('.popup');
+          window.util.closeByEscape(evt, popup);
+        });
       }
       mapPins.appendChild(fragmentPin);
     }

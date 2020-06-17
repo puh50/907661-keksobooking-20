@@ -29,16 +29,6 @@
       var pointerY = this.fillDefaultAddress().y + Math.floor(parseInt(this.fillDefaultAddress().width, 10) / 2) + pointerHeight;
       addressField.value = this.fillDefaultAddress().x + ', ' + pointerY;
     },
-    disableFields: function (fields) {
-      for (var f = 0; f < fields.length; f++) {
-        fields[f].setAttribute('disabled', '');
-      }
-    },
-    activateFields: function (fields) {
-      for (var f = 0; f < fields.length; f++) {
-        fields[f].removeAttribute('disabled');
-      }
-    },
     validateRoomsGuestsNumber: function () {
       var guestsSelect = adForm.querySelector('#capacity');
       var roomsSelect = adForm.querySelector('#room_number');

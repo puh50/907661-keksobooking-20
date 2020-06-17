@@ -5,16 +5,16 @@
   var fieldsets = document.querySelectorAll('fieldset');
   var selects = document.querySelectorAll('select');
 
-  window.form.disableFields(fieldsets);
-  window.form.disableFields(selects);
+  window.util.disableFields(fieldsets);
+  window.util.disableFields(selects);
   window.form.fillDefaultAddress();
 
   window.activatePage = function () {
     var map = document.querySelector('.map');
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
-    window.form.activateFields(fieldsets);
-    window.form.activateFields(selects);
+    window.util.activateFields(fieldsets);
+    window.util.activateFields(selects);
     window.form.fillAddressActiveMap();
 
     window.data.createAd(4);
