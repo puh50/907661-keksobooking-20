@@ -11,7 +11,6 @@
   var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
   var DESCRIPTION = ['Замечательное жилье', 'Уютное', 'С евро ремонтом'];
   var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
-  // var ads = [];
 
   var getRandomValue = function (min, max) {
     return Math.random() * (max - min) + min;
