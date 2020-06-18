@@ -45,16 +45,16 @@
       popup.remove();
     }
   };
-
-  var onPinMainMousedown = function (evt) {
+  // page enabling
+  var activatePageOnPinMain = function (evt) {
     var buttonPressed = evt.button;
     if (buttonPressed === 0 || evt.code === 'Enter') {
       window.activatePage();
-      mapPinMain.removeEventListener('mousedown', onPinMainMousedown);
-      mapPinMain.removeEventListener('keydown', onPinMainMousedown);
+      mapPinMain.removeEventListener('mousedown', activatePageOnPinMain);
+      mapPinMain.removeEventListener('keydown', activatePageOnPinMain);
     }
   };
-  mapPinMain.addEventListener('mousedown', onPinMainMousedown);
-  mapPinMain.addEventListener('keydown', onPinMainMousedown);
+  mapPinMain.addEventListener('mousedown', activatePageOnPinMain);
+  mapPinMain.addEventListener('keydown', activatePageOnPinMain);
 
 })();

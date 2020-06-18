@@ -21,13 +21,21 @@
       return {
         x: xCenter,
         y: yCenter,
-        width: width
+        width: width,
+        height: height
       };
     },
     fillAddressActiveMap: function () {
       var pointerHeight = 18; // from pseudo element ::after of mapPinMain, border-top property
-      var pointerY = this.fillDefaultAddress().y + Math.floor(parseInt(this.fillDefaultAddress().width, 10) / 2) + pointerHeight;
-      addressField.value = this.fillDefaultAddress().x + ', ' + pointerY;
+      var pointerY = this.fillDefaultAddress().y + Math.floor(parseInt(this.fillDefaultAddress().height, 10) / 2) + pointerHeight;
+      var pointerX = this.fillDefaultAddress().x;
+      addressField.value = pointerX + ', ' + pointerY;
+
+      return {
+        pointerHeight: pointerHeight,
+        pointerX: pointerX,
+        pointerY: pointerY
+      };
     },
     validateRoomsGuestsNumber: function () {
       var guestsSelect = adForm.querySelector('#capacity');
