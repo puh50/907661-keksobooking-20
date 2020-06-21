@@ -5,19 +5,19 @@
   var mapPinMain = map.querySelector('.map__pin--main');
 
   window.map = {
-    renderPins: function () {
+    renderPins: function (ads) {
       var mapFilter = map.querySelector('.map__filters-container');
       var mapPins = document.querySelector('.map__pins');
       var fragmentPin = document.createDocumentFragment();
 
-      for (var i = 0; i < window.data.ads.length; i++) {
-        var pin = window.createPin(window.data.ads[i]);
+      for (var i = 0; i < ads.length; i++) {
+        var pin = window.createPin(ads[i]);
         fragmentPin.appendChild(pin);
 
         (function (index) {
           pin.addEventListener('click', function () {
             closePopup();
-            map.insertBefore(window.craeteCard(window.data.ads[index]), mapFilter);
+            map.insertBefore(window.craeteCard(ads[index]), mapFilter);
           });
         })(i);
 
@@ -25,7 +25,7 @@
           pin.addEventListener('keydown', function (evt) {
             if (evt.code === 'Enter') {
               closePopup();
-              map.insertBefore(window.craeteCard(window.data.ads[index]), mapFilter);
+              map.insertBefore(window.craeteCard(ads[index]), mapFilter);
             }
           });
         })(i);
