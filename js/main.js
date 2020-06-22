@@ -17,8 +17,7 @@
     window.util.activateFields(selects);
     window.form.fillAddressActiveMap();
 
-    window.data.createAd(4);
-    window.map.renderPins();
+    window.load(window.map.renderPins, function () {});
 
     // Validation
     // guests/rooms validation
@@ -51,5 +50,6 @@
     timeout.addEventListener('change', function () {
       window.form.synchronizeTime(timein, timeout);
     });
+
   };
 })();
