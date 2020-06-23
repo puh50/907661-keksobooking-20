@@ -5,6 +5,15 @@
   var addressField = adForm.querySelector('#address');
   var price = adForm.querySelector('#price');
 
+  adForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.upload(new FormData(adForm), function () {
+      window.main.deactivatePage();
+      window.form.fillDefaultAddress();
+      window.main.renderSuccessMessage();
+    }, window.main.renderErrorMessage);
+  });
+
   window.form = {
     fillDefaultAddress: function () {
       var map = document.querySelector('.map');
@@ -66,6 +75,23 @@
         title.setCustomValidity('');
       }
     },
+    changePlaceholder: function () {
+      var type = adForm.querySelector('#type');
+
+      switch (type.value) {
+        case 'bungalo':
+          price.setAttribute('placeholder', '0');
+          break;
+        case 'flat':
+          price.setAttribute('placeholder', '1000');
+          break;
+        case 'house':
+          price.setAttribute('placeholder', '5000');
+          break;
+        case 'palace':
+          price.setAttribute('placeholder', '10000');
+      }
+    },
     priceTypeValidationHandler: function () {
       var type = adForm.querySelector('#type');
 
@@ -73,25 +99,18 @@
         return price.value < minPrice ? price.setCustomValidity('Минимальная цена за ночь для ' + type.options[type.selectedIndex].text + ': ' + minPrice) : price.setCustomValidity('');
       };
 
-      var changePlaceholder = function (placeholder) {
-        price.setAttribute('placeholder', placeholder);
-      };
-
       switch (type.value) {
         case 'bungalo':
-          changePlaceholder(0);
+          getMinPriceNotification(0);
           break;
         case 'flat':
           getMinPriceNotification(1000);
-          changePlaceholder(1000);
           break;
         case 'house':
           getMinPriceNotification(5000);
-          changePlaceholder(5000);
           break;
         case 'palace':
           getMinPriceNotification(10000);
-          changePlaceholder(10000);
       }
     },
     priceValidationHandler: function () {
@@ -103,6 +122,9 @@
     },
     synchronizeTime: function (time1, time2) {
       time1.value = time2.value;
+    },
+    resetForm: function () {
+      adForm.reset();
     }
   };
 })();
