@@ -18,9 +18,23 @@
     titleCard.textContent = ad.offer.title;
     addressCard.textContent = ad.offer.address;
     priceCard.textContent = ad.offer.price + ' ₽/ночь';
-    typeCard.textContent = ad.offer.type;
     checkInOutCard.textContent = 'Заезд после ' + ad.offer.checkin + ', ' + 'выезд до ' + ad.offer.checkout;
     descriptionCard.textContent = ad.offer.description;
+
+    var renderType = function () {
+      switch (ad.offer.type) {
+        case 'flat':
+          typeCard.textContent = 'Квартира';
+          break;
+        case 'house':
+          typeCard.textContent = 'Дом';
+          break;
+        case 'bungalo':
+          typeCard.textContent = 'Бунгало';
+          break;
+      }
+    };
+    renderType();
 
     var adjustRoomsText = function () {
       if (ad.offer.rooms === 1) {
@@ -57,16 +71,20 @@
     var renderPhotos = function (photosArray) {
       var photosCard = card.querySelector('.popup__photos');
       var photoCard = card.querySelector('.popup__photo');
-      photoCard.src = photosArray[0];
 
       if (photosArray.length > 1) {
         var fragmentPhoto = document.createDocumentFragment();
-        for (var p = 1; p < photosArray.length; p++) {
+        for (var p = 0; p < photosArray.length; p++) {
           var clonedPhoto = photoCard.cloneNode(true);
           clonedPhoto.src = photosArray[p];
           fragmentPhoto.appendChild(clonedPhoto);
         }
         photosCard.appendChild(fragmentPhoto);
+      }
+      if (photosArray.length > 0) {
+        photoCard.src = photosArray[0];
+      } else {
+        photosCard.remove();
       }
     };
     renderPhotos(ad.offer.photos);

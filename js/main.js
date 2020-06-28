@@ -4,8 +4,6 @@
   var main = document.querySelector('main');
   var map = document.querySelector('.map');
   var adForm = document.querySelector('.ad-form');
-  var fieldsets = document.querySelectorAll('fieldset');
-  var selects = document.querySelectorAll('select');
   var guestsSelect = adForm.querySelector('#capacity');
   var roomsSelect = adForm.querySelector('#room_number');
   var title = adForm.querySelector('#title');
@@ -14,16 +12,29 @@
   var timein = adForm.querySelector('#timein');
   var timeout = adForm.querySelector('#timeout');
   var resetButton = adForm.querySelector('.ad-form__reset');
+  var mapFilter = map.querySelector('.map__filters');
+  var housingTypeFilter = map.querySelector('#housing-type');
 
   window.main = {
     activatePage: function () {
       map.classList.remove('map--faded');
       adForm.classList.remove('ad-form--disabled');
-      window.util.activateFields(fieldsets);
-      window.util.activateFields(selects);
+      window.form.activateAdForm();
+      window.filter.activateFilter();
       window.form.fillAddressActiveMap();
 
-      window.load(window.map.renderPins, function () { });
+      window.load(window.map.renderPins, function (message) {
+        window.main.renderErrorMessage(message);
+        window.filter.deactivateFilter();
+      });
+
+      housingTypeFilter.addEventListener('change', function () {
+        window.filter.filterByHousingType(window.map.ads);
+      });
+
+      mapFilter.addEventListener('change', function () {
+        window.map.closePopup();
+      });
 
       // Validation
       // guests/rooms validation
@@ -58,8 +69,8 @@
     deactivatePage: function () {
       map.classList.add('map--faded');
       adForm.classList.add('ad-form--disabled');
-      window.util.disableFields(fieldsets);
-      window.util.disableFields(selects);
+      window.form.deactivateAdForm();
+      window.filter.deactivateFilter();
       window.map.removePins();
       window.map.closePopup();
       window.form.resetForm();

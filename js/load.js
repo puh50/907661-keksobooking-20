@@ -13,7 +13,7 @@
           break;
 
         default:
-          onError('Cтатус ответа: : ' + xhr.status + ' ' + xhr.statusText);
+          onError('Ошибка загрузки обьявлений. Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }
 
       xhr.addEventListener('error', function () {
