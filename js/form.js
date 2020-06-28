@@ -2,6 +2,8 @@
 
 (function () {
   var adForm = document.querySelector('.ad-form');
+  var adFormFieldsets = adForm.querySelectorAll('fieldset');
+  var adFormSelects = adForm.querySelectorAll('select');
   var addressField = adForm.querySelector('#address');
   var price = adForm.querySelector('#price');
 
@@ -125,6 +127,14 @@
     },
     resetForm: function () {
       adForm.reset();
+    },
+    activateAdForm: function () {
+      window.util.activateFields(adFormFieldsets);
+      window.util.activateFields(adFormSelects);
+    },
+    deactivateAdForm: function () {
+      window.util.disableFields(adFormFieldsets);
+      window.util.disableFields(adFormSelects);
     }
   };
 })();
