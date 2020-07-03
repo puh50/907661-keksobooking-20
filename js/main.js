@@ -13,7 +13,8 @@
   var timeout = adForm.querySelector('#timeout');
   var resetButton = adForm.querySelector('.ad-form__reset');
   var mapFilter = map.querySelector('.map__filters');
-  var housingTypeFilter = map.querySelector('#housing-type');
+  // var housingTypeFilter = map.querySelector('#housing-type');
+  // var priceFilter = map.querySelector('#housing-price');
 
   window.main = {
     activatePage: function () {
@@ -28,12 +29,10 @@
         window.filter.deactivateFilter();
       });
 
-      housingTypeFilter.addEventListener('change', function () {
-        window.filter.filterByHousingType(window.map.ads);
-      });
-
       mapFilter.addEventListener('change', function () {
         window.map.closePopup();
+        window.map.removePins();
+        window.filter.filtering(window.map.ads);
       });
 
       // Validation

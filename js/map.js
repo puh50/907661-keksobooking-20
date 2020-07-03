@@ -12,6 +12,7 @@
       var fragmentPin = document.createDocumentFragment();
       var pinsToShow = 5;
       window.map.ads = data;
+      console.log(data);
 
       if (pinsToShow > data.length) {
         pinsToShow = data.length;
