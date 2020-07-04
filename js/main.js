@@ -13,8 +13,6 @@
   var timeout = adForm.querySelector('#timeout');
   var resetButton = adForm.querySelector('.ad-form__reset');
   var mapFilter = map.querySelector('.map__filters');
-  // var housingTypeFilter = map.querySelector('#housing-type');
-  // var priceFilter = map.querySelector('#housing-price');
 
   window.main = {
     activatePage: function () {
@@ -29,11 +27,12 @@
         window.filter.deactivateFilter();
       });
 
-      mapFilter.addEventListener('change', function () {
+      mapFilter.addEventListener('change', window.debounce(function () {
         window.map.closePopup();
         window.map.removePins();
         window.filter.filtering(window.map.ads);
-      });
+      })
+      );
 
       // Validation
       // guests/rooms validation
