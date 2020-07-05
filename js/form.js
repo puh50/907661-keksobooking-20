@@ -48,11 +48,12 @@
         pointerY: pointerY
       };
     },
-    validateRoomsGuestsNumber: function () {
+    roomsGuestsValidationHandler: function () {
       var guestsSelect = adForm.querySelector('#capacity');
       var roomsSelect = adForm.querySelector('#room_number');
       var roomsValue = parseInt(roomsSelect.value, 10);
       var guestsValue = parseInt(guestsSelect.value, 10);
+
       if (roomsValue === 1 && (guestsValue === 0 || guestsValue > roomsValue)) {
         roomsSelect.setCustomValidity('для 1 гостя');
       } else if (roomsValue === 2 && (guestsValue === 0 || guestsValue > roomsValue)) {
@@ -125,14 +126,14 @@
     synchronizeTime: function (time1, time2) {
       time1.value = time2.value;
     },
-    resetForm: function () {
+    reset: function () {
       adForm.reset();
     },
-    activateAdForm: function () {
+    activate: function () {
       window.util.activateFields(adFormFieldsets);
       window.util.activateFields(adFormSelects);
     },
-    deactivateAdForm: function () {
+    deactivate: function () {
       window.util.disableFields(adFormFieldsets);
       window.util.disableFields(adFormSelects);
     }

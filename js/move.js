@@ -30,7 +30,7 @@
       var leftPosition = mapPinMain.offsetLeft - shift.x;
       var topBorder = 131;
       var bottomBorder = 631;
-      var laeftBorder = 0;
+      var leftBorder = 0;
       var rightBorder = 1201;
       var pinHalfWidth = parseInt(window.form.fillDefaultAddress().width, 10) / 2;
       var pinHeight = parseInt(window.form.fillDefaultAddress().height, 10);
@@ -40,16 +40,16 @@
       mapPinMain.style.top = topPosition + 'px';
       mapPinMain.style.left = leftPosition + 'px';
 
-      if (topPosition <= topBorder - pinFullHeight) {
+      if (topPosition <= topBorder - pinFullHeight || startCoords.y < mapPinMain.getBoundingClientRect().top) {
         mapPinMain.style.top = topBorder - pinFullHeight + 'px';
       }
-      if (topPosition >= bottomBorder - pinFullHeight) {
+      if (topPosition >= bottomBorder - pinFullHeight || startCoords.y > mapPinMain.getBoundingClientRect().bottom) {
         mapPinMain.style.top = bottomBorder - pinFullHeight + 'px';
       }
-      if (leftPosition <= laeftBorder - pinHalfWidth) {
-        mapPinMain.style.left = laeftBorder - pinHalfWidth + 'px';
+      if (leftPosition <= leftBorder - pinHalfWidth || startCoords.x < mapPinMain.getBoundingClientRect().left) {
+        mapPinMain.style.left = leftBorder - pinHalfWidth + 'px';
       }
-      if (leftPosition >= rightBorder - pinHalfWidth) {
+      if (leftPosition >= rightBorder - pinHalfWidth || startCoords.x > mapPinMain.getBoundingClientRect().right) {
         mapPinMain.style.left = rightBorder - pinHalfWidth + 'px';
       }
 
