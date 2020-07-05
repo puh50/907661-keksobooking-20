@@ -7,15 +7,15 @@
   var filterSelects = mapFilter.querySelectorAll('select');
 
   window.filter = {
-    activateFilter: function () {
+    activate: function () {
       window.util.activateFields(filterFieldsets);
       window.util.activateFields(filterSelects);
     },
-    deactivateFilter: function () {
+    deactivate: function () {
       window.util.disableFields(filterFieldsets);
       window.util.disableFields(filterSelects);
     },
-    filtering: function (data) {
+    filtrate: function (data) {
 
       var filterByHousingType = function (item) {
         var housingTypeFilter = map.querySelector('#housing-type');
@@ -83,7 +83,7 @@
             return false;
           }
         }
-        return true;
+        return item;
       };
 
       var filteredData = data.filter(function (item) {

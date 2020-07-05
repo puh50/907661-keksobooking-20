@@ -44,12 +44,12 @@
       }
       mapPins.appendChild(fragmentPin);
     },
-    activatePageOnPinMain: function (evt) {
+    onPinMainClickOrEnter: function (evt) {
       var buttonPressed = evt.button;
       if (buttonPressed === 0 || evt.code === 'Enter') {
         window.main.activatePage();
-        mapPinMain.removeEventListener('mousedown', window.map.activatePageOnPinMain);
-        mapPinMain.removeEventListener('keydown', window.map.activatePageOnPinMain);
+        mapPinMain.removeEventListener('mousedown', window.map.onPinMainClickOrEnter);
+        mapPinMain.removeEventListener('keydown', window.map.onPinMainClickOrEnter);
       }
     },
     removePins: function () {

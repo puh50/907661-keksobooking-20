@@ -3,6 +3,7 @@
 (function () {
   var main = document.querySelector('main');
   var map = document.querySelector('.map');
+  var mapPinMain = map.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
   var guestsSelect = adForm.querySelector('#capacity');
   var roomsSelect = adForm.querySelector('#room_number');
@@ -18,26 +19,26 @@
     activatePage: function () {
       map.classList.remove('map--faded');
       adForm.classList.remove('ad-form--disabled');
-      window.form.activateAdForm();
-      window.filter.activateFilter();
+      window.form.activate();
+      window.filter.activate();
       window.form.fillAddressActiveMap();
 
       window.load(window.map.renderPins, function (message) {
         window.main.renderErrorMessage(message);
-        window.filter.deactivateFilter();
+        window.filter.deactivate();
       });
 
       mapFilter.addEventListener('change', window.debounce(function () {
         window.map.closePopup();
         window.map.removePins();
-        window.filter.filtering(window.map.ads);
+        window.filter.filtrate(window.map.ads);
       })
       );
 
       // Validation
       // guests/rooms validation
-      roomsSelect.addEventListener('change', window.form.validateRoomsGuestsNumber);
-      guestsSelect.addEventListener('change', window.form.validateRoomsGuestsNumber);
+      roomsSelect.addEventListener('change', window.form.roomsGuestsValidationHandler);
+      guestsSelect.addEventListener('change', window.form.roomsGuestsValidationHandler);
 
       // title validation
       title.addEventListener('invalid', window.form.titleValidationHandler);
@@ -67,21 +68,20 @@
     deactivatePage: function () {
       map.classList.add('map--faded');
       adForm.classList.add('ad-form--disabled');
-      window.form.deactivateAdForm();
-      window.filter.deactivateFilter();
+      window.form.deactivate();
+      window.filter.deactivate();
       window.map.removePins();
       window.map.closePopup();
-      window.form.resetForm();
+      window.form.reset();
       window.form.changePlaceholder();
       window.form.fillDefaultAddress();
       window.map.setMainPinDefaultPlace();
 
-      var mapPinMain = map.querySelector('.map__pin--main');
-      mapPinMain.addEventListener('mousedown', window.map.activatePageOnPinMain);
-      mapPinMain.addEventListener('keydown', window.map.activatePageOnPinMain);
+      mapPinMain.addEventListener('mousedown', window.map.onPinMainClickOrEnter);
+      mapPinMain.addEventListener('keydown', window.map.onPinMainClickOrEnter);
 
-      roomsSelect.removeEventListener('change', window.form.validateRoomsGuestsNumber);
-      guestsSelect.removeEventListener('change', window.form.validateRoomsGuestsNumber);
+      roomsSelect.removeEventListener('change', window.form.roomsGuestsValidationHandler);
+      guestsSelect.removeEventListener('change', window.form.roomsGuestsValidationHandler);
 
       // title validation
       title.removeEventListener('invalid', window.form.titleValidationHandler);
