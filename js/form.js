@@ -127,7 +127,21 @@
       time1.value = time2.value;
     },
     reset: function () {
+      var preview = adForm.querySelector('.ad-form-header__preview img');
       adForm.reset();
+      preview.src = 'img/muffin-grey.svg';
+
+      var photoContainer = document.querySelector('.ad-form__photo-container');
+      var photoBlocks = photoContainer.querySelectorAll('.ad-form__photo');
+      var image = photoBlocks[0].querySelector('img');
+
+      if (image) {
+        image.remove();
+      }
+
+      for (var i = 1; i < photoBlocks.length; i++) {
+        photoBlocks[i].remove();
+      }
     },
     activate: function () {
       window.util.activateFields(adFormFieldsets);
