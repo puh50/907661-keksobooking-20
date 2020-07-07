@@ -15,6 +15,9 @@
       window.util.disableFields(filterFieldsets);
       window.util.disableFields(filterSelects);
     },
+    reset: function () {
+      mapFilter.reset();
+    },
     filtrate: function (data) {
 
       var filterByHousingType = function (item) {

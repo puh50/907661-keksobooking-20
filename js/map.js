@@ -18,38 +18,57 @@
       }
 
       for (var i = 0; i < pinsToShow; i++) {
-        var pin = window.createPin(data[i]);
-        fragmentPin.appendChild(pin);
+        if (data[i].offer !== undefined) {
+          var pin = window.createPin(data[i]);
+          fragmentPin.appendChild(pin);
 
-        (function (index) {
-          pin.addEventListener('click', function () {
-            window.map.closePopup();
-            map.insertBefore(window.craeteCard(data[index]), mapFilter);
-          });
-        })(i);
-
-        (function (index) {
-          pin.addEventListener('keydown', function (evt) {
-            if (evt.code === 'Enter') {
+          (function (element, index) {
+            element.addEventListener('click', function () {
+              var activeElement = map.querySelector('.map__pin--active');
+              if (activeElement) {
+                activeElement.classList.remove('map__pin--active');
+              }
+              element.classList.add('map__pin--active');
               window.map.closePopup();
               map.insertBefore(window.craeteCard(data[index]), mapFilter);
-            }
-          });
-        })(i);
+            });
+          })(pin, i);
+
+          (function (element, index) {
+            element.addEventListener('keydown', function (evt) {
+              if (evt.code === 'Enter') {
+                element.classList.add('map__pin--active');
+                window.map.closePopup();
+                map.insertBefore(window.craeteCard(data[index]), mapFilter);
+              }
+            });
+          })(pin, i);
+        }
 
         document.addEventListener('keydown', function (evt) {
           var popup = map.querySelector('.popup');
+          var activeElement = map.querySelector('.map__pin--active');
           window.util.closeByEscape(evt, popup);
+          if (activeElement) {
+            activeElement.classList.remove('map__pin--active');
+          }
         });
       }
       mapPins.appendChild(fragmentPin);
     },
-    onPinMainClickOrEnter: function (evt) {
+    pinMainClickHandler: function (evt) {
       var buttonPressed = evt.button;
-      if (buttonPressed === 0 || evt.code === 'Enter') {
+      if (buttonPressed === 0) {
         window.main.activatePage();
-        mapPinMain.removeEventListener('mousedown', window.map.onPinMainClickOrEnter);
-        mapPinMain.removeEventListener('keydown', window.map.onPinMainClickOrEnter);
+        mapPinMain.removeEventListener('mousedown', window.map.pinMainClickHandler);
+        mapPinMain.removeEventListener('keydown', window.map.pinMainEnterPressHandler);
+      }
+    },
+    pinMainEnterPressHandler: function (evt) {
+      if (evt.code === 'Enter') {
+        window.main.activatePage();
+        mapPinMain.removeEventListener('keydown', window.map.pinMainEnterPressHandler);
+        mapPinMain.removeEventListener('mousedown', window.map.pinMainClickHandler);
       }
     },
     removePins: function () {

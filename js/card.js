@@ -90,6 +90,9 @@
     renderPhotos(ad.offer.photos);
 
     card.querySelector('.popup__close').addEventListener('click', function () {
+      var map = document.querySelector('.map');
+      var activeElement = map.querySelector('.map__pin--active');
+      activeElement.classList.remove('map__pin--active');
       card.remove();
     });
 

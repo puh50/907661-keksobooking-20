@@ -63,7 +63,7 @@
         window.form.synchronizeTime(timein, timeout);
       });
 
-      resetButton.addEventListener('click', this.deactivatePage);
+      resetButton.addEventListener('click', window.main.deactivatePage);
     },
     deactivatePage: function () {
       map.classList.add('map--faded');
@@ -73,12 +73,13 @@
       window.map.removePins();
       window.map.closePopup();
       window.form.reset();
+      window.filter.reset();
       window.form.changePlaceholder();
-      window.form.fillDefaultAddress();
       window.map.setMainPinDefaultPlace();
+      window.form.fillDefaultAddress();
 
-      mapPinMain.addEventListener('mousedown', window.map.onPinMainClickOrEnter);
-      mapPinMain.addEventListener('keydown', window.map.onPinMainClickOrEnter);
+      mapPinMain.addEventListener('mousedown', window.map.pinMainClickHandler);
+      mapPinMain.addEventListener('keydown', window.map.pinMainEnterPressHandler);
 
       roomsSelect.removeEventListener('change', window.form.roomsGuestsValidationHandler);
       guestsSelect.removeEventListener('change', window.form.roomsGuestsValidationHandler);
@@ -106,7 +107,7 @@
         window.form.synchronizeTime(timein, timeout);
       });
 
-      resetButton.removeEventListener('click', this.deactivatePage);
+      resetButton.removeEventListener('click', window.main.deactivatePage);
     },
     renderSuccessMessage: function () {
       var messageTemplate = document.querySelector('#success').content.querySelector('.success');
