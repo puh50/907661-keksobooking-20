@@ -23,7 +23,11 @@
       window.filter.activate();
       window.form.fillAddressActiveMap();
 
-      window.load(window.map.renderPins, function (message) {
+      window.data.load(function (data) {
+        window.map.renderPins(data.filter(function (item) {
+          return item.offer;
+        }));
+      }, function (message) {
         window.main.renderErrorMessage(message);
         window.filter.deactivate();
       });

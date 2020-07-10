@@ -1,6 +1,23 @@
 'use strict';
 
 (function () {
+  var MIDDLE_PRICE = 10000;
+  var HIGH_PRICE = 50000;
+
+  var price = {
+    low: 'low',
+    middle: 'middle',
+    high: 'high'
+  };
+
+  var avalaibleGuests = {
+    '1': 1,
+    '2': 2,
+    '0': 'не для гостей'
+  };
+
+  var ANY_OPTION = 'any';
+
   var map = document.querySelector('.map');
   var mapFilter = map.querySelector('.map__filters');
   var filterFieldsets = mapFilter.querySelectorAll('fieldset');
@@ -33,12 +50,12 @@
         var priceFilter = map.querySelector('#housing-price');
 
         switch (priceFilter.value) {
-          case 'low':
-            return item.offer.price < 10000;
-          case 'middle':
-            return item.offer.price >= 10000 && item.offer.price < 50000;
-          case 'high':
-            return item.offer.price >= 50000;
+          case price.low:
+            return item.offer.price < MIDDLE_PRICE;
+          case price.middle:
+            return item.offer.price >= MIDDLE_PRICE && item.offer.price < HIGH_PRICE;
+          case price.high:
+            return item.offer.price >= HIGH_PRICE;
           default:
             return item;
         }
@@ -47,35 +64,23 @@
       var filterByRooms = function (item) {
         var roomsFilter = map.querySelector('#housing-rooms');
 
-        switch (roomsFilter.value) {
-          case 'any':
-            return item.offer.rooms >= 0;
-          case '1':
-            return item.offer.rooms === 1;
-          case '2':
-            return item.offer.rooms === 2;
-          case '3':
-            return item.offer.rooms === 3;
-          default:
-            return item;
+        if (roomsFilter.value === ANY_OPTION) {
+          return item.offer.rooms >= 0;
         }
+
+        return item.offer.rooms === parseInt(roomsFilter.value, 10);
       };
 
       var filterByGuests = function (item) {
         var guestsFilter = map.querySelector('#housing-guests');
 
-        switch (guestsFilter.value) {
-          case 'any':
-            return item.offer.guests >= 0;
-          case '0':
-            return item.offer.guests === 'не для гостей';
-          case '1':
-            return item.offer.guests === 1;
-          case '2':
-            return item.offer.guests === 2;
-          default:
-            return item;
+        if (guestsFilter.value === ANY_OPTION) {
+          return item.offer.guests >= 0;
+        } else if (avalaibleGuests[guestsFilter.value]) {
+          return avalaibleGuests[guestsFilter.value] === item.offer.guests;
         }
+
+        return item;
       };
 
       var filterByFeatures = function (item) {

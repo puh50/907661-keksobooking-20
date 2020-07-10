@@ -1,6 +1,36 @@
 'use strict';
 
 (function () {
+  var MIN_PRICE_BUNGALO = 0;
+  var MIN_PRICE_FLAT = 1000;
+  var MIN_PRICE_HOUSE = 5000;
+  var MIN_PRICE_PALACE = 10000;
+  var MAX_PRICE = 1000000;
+
+  var MIN_TITLE_LENGTH = 30;
+  var MAX_TITLE_LENGTH = 100;
+
+  var MAIN_PIN_POINTER_HEIGHT = 18; // from pseudo element ::after of mapPinMain, border-top property
+
+  var availableRooms = {
+    1: {
+      guests: [1],
+      errorMessage: 'для 1 гостя'
+    },
+    2: {
+      guests: [1, 2],
+      errorMessage: 'для 1 или 2 гостей'
+    },
+    3: {
+      guests: [1, 2, 3],
+      errorMessage: 'для 1, 2 или 3 гостей'
+    },
+    100: {
+      guests: [0],
+      errorMessage: 'не для гостей'
+    }
+  };
+
   var adForm = document.querySelector('.ad-form');
   var adFormFieldsets = adForm.querySelectorAll('fieldset');
   var adFormSelects = adForm.querySelectorAll('select');
@@ -9,11 +39,11 @@
 
   adForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.upload(new FormData(adForm), function () {
+    window.data.upload(function () {
       window.main.deactivatePage();
       window.form.fillDefaultAddress();
       window.main.renderSuccessMessage();
-    }, window.main.renderErrorMessage);
+    }, window.main.renderErrorMessage, new FormData(adForm));
   });
 
   window.form = {
@@ -37,13 +67,12 @@
       };
     },
     fillAddressActiveMap: function () {
-      var pointerHeight = 18; // from pseudo element ::after of mapPinMain, border-top property
-      var pointerY = this.fillDefaultAddress().y + Math.floor(parseInt(this.fillDefaultAddress().height, 10) / 2) + pointerHeight;
+      var pointerY = this.fillDefaultAddress().y + Math.floor(parseInt(this.fillDefaultAddress().height, 10) / 2) + MAIN_PIN_POINTER_HEIGHT;
       var pointerX = this.fillDefaultAddress().x;
       addressField.value = pointerX + ', ' + pointerY;
 
       return {
-        pointerHeight: pointerHeight,
+        pointerHeight: MAIN_PIN_POINTER_HEIGHT,
         pointerX: pointerX,
         pointerY: pointerY
       };
@@ -54,26 +83,20 @@
       var roomsValue = parseInt(roomsSelect.value, 10);
       var guestsValue = parseInt(guestsSelect.value, 10);
 
-      if (roomsValue === 1 && (guestsValue === 0 || guestsValue > roomsValue)) {
-        roomsSelect.setCustomValidity('для 1 гостя');
-      } else if (roomsValue === 2 && (guestsValue === 0 || guestsValue > roomsValue)) {
-        roomsSelect.setCustomValidity('для 1 или 2 гостей');
-      } else if (roomsValue === 3 && (guestsValue === 0 || guestsValue > roomsValue)) {
-        roomsSelect.setCustomValidity('для 1, 2 или 3 гостей');
-      } else if (roomsValue === 100 && guestsValue !== 0) {
-        roomsSelect.setCustomValidity('не для гостей');
-      } else {
+      if (availableRooms[roomsValue].guests.includes(guestsValue)) {
         roomsSelect.setCustomValidity('');
+      } else {
+        roomsSelect.setCustomValidity(availableRooms[roomsValue].errorMessage);
       }
     },
     titleValidationHandler: function () {
       var title = adForm.querySelector('#title');
       if (title.value.length === 0) {
-        title.setCustomValidity('Заголовок объявления должен содержать от 30 до 100 символов.');
-      } else if (title.value.length < 30) {
-        title.setCustomValidity('Заголовок объявления должен содержать от 30 до 100 символов. Введите еще ' + (30 - title.value.length));
-      } else if (title.value.length > 100) {
-        title.setCustomValidity('Заголовок объявления должен содержать от 30 до 100 символов. Удалите ' + (title.value.length - 100));
+        title.setCustomValidity('Заголовок объявления должен содержать от ' + MIN_TITLE_LENGTH + ' до ' + MAX_TITLE_LENGTH + ' символов.');
+      } else if (title.value.length < MIN_TITLE_LENGTH) {
+        title.setCustomValidity('Заголовок объявления должен содержать от ' + MIN_TITLE_LENGTH + ' до ' + MAX_TITLE_LENGTH + ' символов. Введите еще ' + (MIN_TITLE_LENGTH - title.value.length));
+      } else if (title.value.length > MAX_TITLE_LENGTH) {
+        title.setCustomValidity('Заголовок объявления должен содержать от ' + MIN_TITLE_LENGTH + ' до ' + MAX_TITLE_LENGTH + ' символов. Удалите ' + (title.value.length - MAX_TITLE_LENGTH));
       } else {
         title.setCustomValidity('');
       }
@@ -82,17 +105,17 @@
       var type = adForm.querySelector('#type');
 
       switch (type.value) {
-        case 'bungalo':
-          price.setAttribute('placeholder', '0');
+        case window.constants.HousingType.BUNGALO:
+          price.setAttribute('placeholder', MIN_PRICE_BUNGALO);
           break;
-        case 'flat':
-          price.setAttribute('placeholder', '1000');
+        case window.constants.HousingType.FLAT:
+          price.setAttribute('placeholder', MIN_PRICE_FLAT);
           break;
-        case 'house':
-          price.setAttribute('placeholder', '5000');
+        case window.constants.HousingType.HOUSE:
+          price.setAttribute('placeholder', MIN_PRICE_HOUSE);
           break;
-        case 'palace':
-          price.setAttribute('placeholder', '10000');
+        case window.constants.HousingType.PALACE:
+          price.setAttribute('placeholder', MIN_PRICE_PALACE);
       }
     },
     priceTypeValidationHandler: function () {
@@ -103,24 +126,24 @@
       };
 
       switch (type.value) {
-        case 'bungalo':
-          getMinPriceNotification(0);
+        case window.constants.HousingType.BUNGALO:
+          getMinPriceNotification(MIN_PRICE_BUNGALO);
           break;
-        case 'flat':
-          getMinPriceNotification(1000);
+        case window.constants.HousingType.FLAT:
+          getMinPriceNotification(MIN_PRICE_FLAT);
           break;
-        case 'house':
-          getMinPriceNotification(5000);
+        case window.constants.HousingType.HOUSE:
+          getMinPriceNotification(MIN_PRICE_HOUSE);
           break;
-        case 'palace':
-          getMinPriceNotification(10000);
+        case window.constants.HousingType.PALACE:
+          getMinPriceNotification(MIN_PRICE_PALACE);
       }
     },
     priceValidationHandler: function () {
       if (price.value.length === 0) {
-        price.setCustomValidity('Заполните поле. Цена за ночь должна быть меньше 1 000 000');
-      } else if (price.value > 1000000) {
-        price.setCustomValidity('Цена за ночь должна быть меньше 1 000 000');
+        price.setCustomValidity('Заполните поле. Цена за ночь должна быть меньше' + MAX_PRICE);
+      } else if (price.value > MAX_PRICE) {
+        price.setCustomValidity('Цена за ночь должна быть меньше' + MAX_PRICE);
       }
     },
     synchronizeTime: function (time1, time2) {

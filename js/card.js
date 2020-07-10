@@ -23,14 +23,17 @@
 
     var renderType = function () {
       switch (ad.offer.type) {
-        case 'flat':
+        case window.constants.HousingType.FLAT:
           typeCard.textContent = 'Квартира';
           break;
-        case 'house':
+        case window.constants.HousingType.HOUSE:
           typeCard.textContent = 'Дом';
           break;
-        case 'bungalo':
+        case window.constants.HousingType.BUNGALO:
           typeCard.textContent = 'Бунгало';
+          break;
+        case window.constants.HousingType.PALACE:
+          typeCard.textContent = 'Дворец';
           break;
       }
     };
